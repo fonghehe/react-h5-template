@@ -1,0 +1,19 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: react_h5
+      POSTGRES_PASSWORD: react_h5
+      POSTGRES_USER: react_h5
+    ports:
+      - '5432:5432'
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U react_h5 -d react_h5']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - react-h5-postgres:/var/lib/postgresql/data
+
+volumes:
+  react-h5-postgres:

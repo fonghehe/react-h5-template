@@ -1,0 +1,4 @@
+{
+  "extends": "@rh5/tsconfig/react-library.json",
+  "include": ["src/**/*.tsx"]
+}

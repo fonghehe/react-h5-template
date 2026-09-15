@@ -1,0 +1,47 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Next.js server: Ant Design Mobile (6777)",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "pnpm dev:antd",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Next.js server: NutUI React (6778)",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "pnpm dev:nutui",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Next.js server: Arco Mobile (6779)",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "pnpm dev:arco",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Browser: Ant Design Mobile (6777)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://127.0.0.1:6777/home",
+      "webRoot": "${workspaceFolder}/apps/h5-antd-mobile"
+    },
+    {
+      "name": "Browser: NutUI React (6778)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://127.0.0.1:6778/home",
+      "webRoot": "${workspaceFolder}/apps/h5-nutui"
+    },
+    {
+      "name": "Browser: Arco Mobile (6779)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://127.0.0.1:6779/home",
+      "webRoot": "${workspaceFolder}/apps/h5-arco-mobile"
+    }
+  ]
+}

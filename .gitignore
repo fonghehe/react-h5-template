@@ -1,0 +1,95 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+node_modules/
+.pnpm-store/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+yarn.lock
+
+# build outputs
+dist/
+out/
+build/
+.next/
+.turbo/
+*.tsbuildinfo
+
+# vitepress
+**/.vitepress/cache/
+**/.vitepress/dist/
+
+# testing
+coverage/
+playwright-report/
+blob-report/
+test-results/
+playwright/.cache/
+
+# caches
+.eslintcache
+.stylelintcache
+.cache/
+
+# logs
+*.log
+
+# local env
+.env*
+!.env.example
+
+# misc
+.DS_Store
+*.pem
+
+# AI assistants: local memory, conversations and caches (never shared rules).
+**/.workbuddy/memory/
+**/.workbuddy/history/
+**/.workbuddy/logs/
+**/.workbuddy/cache/
+**/.claude/settings.local.json
+**/.claude/memory/
+**/.claude/projects/
+**/.claude/worktrees/
+**/.claude/sessions/
+CLAUDE.local.md
+**/.codex/auth.json
+**/.codex/history.jsonl
+**/.codex/sessions/
+**/.codex/memories/
+**/.codex/log/
+**/.codex/tmp/
+**/.codex/state_*.sqlite*
+**/.cursor/chats/
+**/.cursor/memory/
+**/.cursor/cache/
+**/.cursor/worktrees/
+**/.gemini/history/
+**/.gemini/tmp/
+**/.gemini/oauth_creds.json
+**/.gemini/google_accounts.json
+.aider.chat.history.md
+.aider.input.history
+.aider.tags.cache*/
+**/.continue/sessions/
+**/.continue/index/
+**/.continue/logs/
+
+# Keep AGENTS.md, CLAUDE.md, GEMINI.md, .cursor/rules/, .claude/skills/,
+# .codex/skills/ and .github/copilot-instructions.md available to version control.
+
+# editors
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# legacy
+src/.umi
+src/.umi-production
+src/.umi-test

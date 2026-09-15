@@ -1,0 +1,4 @@
+{
+  "extends": "@rh5/tsconfig/base.json",
+  "include": [".vitepress/**/*.ts", ".vitepress/**/*.mts"]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "@rh5/styles",
+  "version": "1.0.0",
+  "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "exports": {
+    "./globals.css": "./src/globals.css"
+  },
+  "dependencies": {
+    "tailwindcss": "^4.3.3"
+  }
+}

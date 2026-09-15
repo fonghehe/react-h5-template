@@ -1,0 +1,23 @@
+{
+  "name": "@rh5/stores",
+  "version": "1.0.0",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./src/index.ts",
+    "./cart": "./src/cart.ts",
+    "./session": "./src/session.ts"
+  },
+  "dependencies": {
+    "@rh5/contracts": "workspace:*",
+    "react": "catalog:",
+    "zustand": "catalog:"
+  },
+  "devDependencies": {
+    "@rh5/tsconfig": "workspace:*",
+    "typescript": "^6.0.2"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  }
+}

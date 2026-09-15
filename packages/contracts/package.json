@@ -1,0 +1,21 @@
+{
+  "name": "@rh5/contracts",
+  "version": "1.0.0",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./src/index.ts",
+    "./domain": "./src/domain.ts",
+    "./schemas": "./src/schemas.ts"
+  },
+  "dependencies": {
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@rh5/tsconfig": "workspace:*",
+    "typescript": "^6.0.2"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  }
+}

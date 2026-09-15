@@ -1,0 +1,80 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Dev: Ant Design Mobile (6777)",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["dev:antd"],
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated" }
+    },
+    {
+      "label": "Dev: NutUI React (6778)",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["dev:nutui"],
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated" }
+    },
+    {
+      "label": "Dev: Arco Mobile (6779)",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["dev:arco"],
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated" }
+    },
+    {
+      "label": "Dev: documentation (6780)",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["dev:docs"],
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated" }
+    },
+    {
+      "label": "Check: lint, types, unit tests, builds",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["check"],
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "shared" }
+    },
+    {
+      "label": "Test: unit",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["test"],
+      "group": "test",
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "shared" }
+    },
+    {
+      "label": "Test: mobile E2E (Ant Design Mobile)",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["test:e2e:antd"],
+      "group": "test",
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "shared" }
+    },
+    {
+      "label": "API: generate from OpenAPI",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["api:generate"],
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "shared" }
+    },
+    {
+      "label": "Database: migrate and seed (requires DATABASE_URL)",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["db:setup"],
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "shared" }
+    }
+  ]
+}

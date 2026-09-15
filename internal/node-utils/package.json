@@ -1,0 +1,25 @@
+{
+  "name": "@rh5/node-utils",
+  "version": "1.0.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./dist/index.mjs",
+      "default": "./dist/index.mjs"
+    }
+  },
+  "dependencies": {
+    "@manypkg/get-packages": "^3.1.0",
+    "consola": "^3.4.2",
+    "execa": "^10.0.0",
+    "find-up": "^8.0.0"
+  }
+}

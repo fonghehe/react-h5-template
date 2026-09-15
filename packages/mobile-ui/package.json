@@ -1,0 +1,36 @@
+{
+  "name": "@rh5/mobile-ui",
+  "version": "1.0.0",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./src/index.ts",
+    "./providers": "./src/providers.tsx",
+    "./ui": "./src/ui.tsx",
+    "./screens/*": "./src/screens/*.tsx"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "catalog:",
+    "@rh5/api-client": "workspace:*",
+    "@rh5/contracts": "workspace:*",
+    "@rh5/i18n": "workspace:*",
+    "@rh5/stores": "workspace:*",
+    "@tanstack/react-query": "catalog:",
+    "ahooks": "catalog:",
+    "lucide-react": "catalog:",
+    "next": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "react-hook-form": "catalog:"
+  },
+  "devDependencies": {
+    "@rh5/tsconfig": "workspace:*",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "msw": "^2.15.0",
+    "typescript": "^6.0.2"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  }
+}

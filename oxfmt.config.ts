@@ -1,0 +1,41 @@
+import { defineConfig } from 'oxfmt';
+
+export default defineConfig({
+  arrowParens: 'always',
+  bracketSameLine: false,
+  bracketSpacing: true,
+  endOfLine: 'lf',
+  ignorePatterns: [
+    '**/.next/**',
+    '**/.turbo/**',
+    '**/.vitepress/cache/**',
+    '**/.vitepress/dist/**',
+    '**/coverage/**',
+    '**/dist/**',
+    '**/node_modules/**',
+    '**/playwright-report/**',
+    '**/test-results/**',
+    '**/*.md',
+    '**/*.svg',
+    '**/*.d.ts',
+    'packages/api-client/src/generated/**',
+    'packages/ui-arco-mobile/src/styles.css',
+    'pnpm-lock.yaml',
+  ],
+  insertFinalNewline: true,
+  printWidth: 100,
+  proseWrap: 'never',
+  quoteProps: 'as-needed',
+  semi: true,
+  singleQuote: true,
+  sortImports: false,
+  sortPackageJson: false,
+  tabWidth: 2,
+  trailingComma: 'all',
+  overrides: [
+    {
+      files: ['*.json', '*.json5', '*.jsonc', '**/*.json', '**/*.json5', '**/*.jsonc'],
+      options: { quoteProps: 'preserve', singleQuote: false, trailingComma: 'none' },
+    },
+  ],
+});

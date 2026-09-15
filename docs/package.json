@@ -1,0 +1,21 @@
+{
+  "name": "@rh5/docs",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "rh5": {
+    "label": "项目文档",
+    "port": 6780
+  },
+  "scripts": {
+    "dev": "vitepress dev --host 127.0.0.1 --port 6780 --strictPort",
+    "build": "vitepress build",
+    "preview": "vitepress preview --host 127.0.0.1 --port 6780 --strictPort",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@rh5/tsconfig": "workspace:*",
+    "typescript": "^6.0.2",
+    "vitepress": "^1.6.4"
+  }
+}

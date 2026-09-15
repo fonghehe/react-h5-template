@@ -1,0 +1,19 @@
+{
+  "name": "@rh5/i18n",
+  "version": "1.0.0",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@rh5/contracts": "workspace:*"
+  },
+  "devDependencies": {
+    "@rh5/tsconfig": "workspace:*",
+    "typescript": "^6.0.2"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  }
+}

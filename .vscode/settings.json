@@ -1,0 +1,57 @@
+{
+  "editor.rulers": [100],
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "oxc.oxc-vscode",
+  "eslint.workingDirectories": ["."],
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.expand": false,
+  "explorer.fileNesting.patterns": {
+    "README.md": "README.zh-CN.md,README.ja-JP.md",
+    "package.json": "pnpm-lock.yaml,pnpm-workspace.yaml,turbo.json",
+    "next.config.ts": "next-env.d.ts,postcss.config.mjs",
+    "tsconfig.json": "tsconfig.*.json",
+    "settings.json": "launch.json,tasks.json,extensions.json",
+    "*.ts": "${capture}.test.ts,${capture}.spec.ts",
+    "*.tsx": "${capture}.test.tsx,${capture}.spec.tsx"
+  },
+  "files.exclude": {
+    "**/.next": true,
+    "**/.turbo": true,
+    "**/.vitepress/dist": true,
+    "**/.vitepress/cache": true,
+    "**/coverage": true,
+    "**/node_modules": true,
+    "**/playwright-report": true,
+    "**/test-results": true
+  },
+  "search.exclude": {
+    "**/.next": true,
+    "**/.turbo": true,
+    "**/.vitepress/dist": true,
+    "**/.vitepress/cache": true,
+    "**/coverage": true,
+    "**/node_modules": true,
+    "packages/api-client/src/generated": true
+  },
+  "files.watcherExclude": {
+    "**/.next/**": true,
+    "**/.turbo/**": true,
+    "**/.vitepress/dist/**": true,
+    "**/.vitepress/cache/**": true,
+    "**/node_modules/**": true
+  },
+  "cSpell.words": [
+    "ahooks",
+    "antd",
+    "Arco",
+    "Drizzle",
+    "NutUI",
+    "Orval",
+    "Oxfmt",
+    "Oxlint",
+    "VitePress",
+    "Zustand"
+  ]
+}

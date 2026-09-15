@@ -1,0 +1,26 @@
+{
+  "name": "@rh5/ui-nutui",
+  "version": "1.0.0",
+  "type": "module",
+  "sideEffects": true,
+  "exports": {
+    ".": "./src/index.tsx",
+    "./styles.css": "./src/styles.css"
+  },
+  "dependencies": {
+    "@nutui/nutui-react": "4.0.0-beta.7",
+    "@rh5/contracts": "workspace:*",
+    "@rh5/mobile-ui": "workspace:*",
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  },
+  "devDependencies": {
+    "@rh5/tsconfig": "workspace:*",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "typescript": "^6.0.2"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  }
+}

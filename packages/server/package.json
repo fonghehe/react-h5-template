@@ -1,0 +1,26 @@
+{
+  "name": "@rh5/server",
+  "version": "1.0.0",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./src/index.ts",
+    "./db": "./src/db/index.ts",
+    "./routes/*": "./src/routes/*.ts"
+  },
+  "dependencies": {
+    "@rh5/contracts": "workspace:*",
+    "drizzle-orm": "^0.45.2",
+    "pg": "^8.23.0",
+    "server-only": "^0.0.1"
+  },
+  "devDependencies": {
+    "@rh5/tsconfig": "workspace:*",
+    "@types/node": "^26.1.2",
+    "@types/pg": "^8.23.1",
+    "typescript": "^6.0.2"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  }
+}

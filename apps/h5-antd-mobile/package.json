@@ -1,0 +1,31 @@
+{
+  "name": "@rh5/h5-antd-mobile",
+  "version": "1.0.0",
+  "private": true,
+  "rh5": {
+    "label": "Ant Design Mobile",
+    "port": 6777
+  },
+  "scripts": {
+    "dev": "next dev --webpack --hostname 127.0.0.1 --port 6777",
+    "build": "next build --webpack",
+    "start": "next start --hostname 127.0.0.1 --port 6777",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@rh5/mobile-ui": "workspace:*",
+    "@rh5/server": "workspace:*",
+    "@rh5/styles": "workspace:*",
+    "@rh5/ui-antd-mobile": "workspace:*",
+    "next": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  },
+  "devDependencies": {
+    "@rh5/tsconfig": "workspace:*",
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "typescript": "^6.0.3"
+  }
+}

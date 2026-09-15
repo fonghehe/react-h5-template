@@ -1,0 +1,29 @@
+{
+  "name": "@rh5/ui-arco-mobile",
+  "version": "1.0.0",
+  "type": "module",
+  "sideEffects": true,
+  "exports": {
+    ".": "./src/index.tsx",
+    "./styles.css": "./src/styles.css"
+  },
+  "dependencies": {
+    "@arco-design/mobile-react": "^2.39.1",
+    "@arco-design/mobile-utils": "^2.23.6",
+    "@rh5/contracts": "workspace:*",
+    "@rh5/mobile-ui": "workspace:*",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "react-transition-group": "^4.4.5"
+  },
+  "devDependencies": {
+    "@rh5/tsconfig": "workspace:*",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "@types/react-transition-group": "^4.4.12",
+    "typescript": "^6.0.2"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  }
+}
