@@ -6,6 +6,8 @@ The `/ai` page is a working SSE client for a demonstration Route Handler at `POS
 
 The screen keeps messages in React state and sends its current array with `Accept-Language` plus `X-Request-ID`. `chatRequestSchema` accepts at most 30 messages and enforces a 1,000-character limit for each before any SSE bytes are written. The screen does not currently trim long histories, so a conversation exceeding the request limit returns an error. An invalid request returns the ordinary JSON `{ code, data: null, message, requestId }` envelope with HTTP 400. The page reads that error message before trying to parse a stream.
 
+The shared `useAiChat` hook owns messages and the request lifecycle. Stop, reset, and unmount abort the active request; late responses or errors from an older request cannot change a newer conversation's state. The reader lock is released after reading. Deltas within one read are combined into one message update. `ChatComposer` owns its draft locally, so typing does not render the conversation again.
+
 A valid request receives `Content-Type: text/event-stream`. The server emits a `start` event with an assistant ID and request ID, multiple `delta` events with text fragments, a `finish` event, and `data: [DONE]`. `consumeSseChunk` holds incomplete UTF-8/line boundaries for the next read and ignores malformed provider events. The page appends deltas as **text** in React; it does not enable raw HTML. The stop control aborts the request and the server checks `request.signal.aborted` between chunks.
 
 ```text

@@ -22,7 +22,7 @@ export default function ProductDetailPage() {
   const [favorite, setFavorite] = useState(false);
   const product = useQuery({
     queryKey: ['product', id, locale],
-    queryFn: () => api.product(id, locale),
+    queryFn: ({ signal }) => api.product(id, locale, signal),
   });
 
   return (

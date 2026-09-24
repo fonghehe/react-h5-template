@@ -46,10 +46,14 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<T
   let response: Response;
   try {
     response = await fetch(path, { ...init, headers });
-  } catch {
+  } catch (error) {
+    if (init.signal?.aborted) throw error;
     throw new ApiError('Network request failed', 0, currentRequestId);
   }
-  const payload = (await response.json().catch(() => null)) as ApiEnvelope<T> | null;
+  const payload = (await response.json().catch((error: unknown) => {
+    if (init.signal?.aborted) throw error;
+    return null;
+  })) as ApiEnvelope<T> | null;
   if (!payload || typeof payload.code !== 'number' || typeof payload.requestId !== 'string') {
     throw new ApiError('Invalid API response', response.status, currentRequestId);
   }
@@ -77,12 +81,16 @@ export const api = {
     }),
   logout: (locale: Locale) => request<null>('/api/auth/logout', { locale, method: 'POST' }),
   user: (token: string, locale: Locale) => request<User>('/api/user', { locale, token }),
-  products: (params: { locale: Locale; page?: number; pageSize?: number }) => {
+  products: (
+    params: { locale: Locale; page?: number; pageSize?: number },
+    signal?: AbortSignal,
+  ) => {
     const search = new URLSearchParams({
       page: String(params.page ?? 1),
       pageSize: String(params.pageSize ?? 10),
     });
-    return request<ProductPage>(`/api/products?${search}`, { locale: params.locale });
+    return request<ProductPage>(`/api/products?${search}`, { locale: params.locale, signal });
   },
-  product: (id: string, locale: Locale) => request<Product>(`/api/products/${id}`, { locale }),
+  product: (id: string, locale: Locale, signal?: AbortSignal) =>
+    request<Product>(`/api/products/${id}`, { locale, signal }),
 };

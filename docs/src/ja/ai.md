@@ -4,6 +4,8 @@
 
 画面は React state の現在のメッセージを全て送り、`Accept-Language` と `X-Request-ID` を付けます。`chatRequestSchema` はストリーム開始前に最大 30 件、各 1,000 文字と形を検証します。画面は長い履歴をまだ切り詰めないため、上限を超えるとエラーになります。不正な入力は HTTP 400 の通常 JSON `{ code, data: null, message, requestId }` です。画面はこの JSON エラーを読んでから SSE の解析を開始するか判断します。
 
+共通の `useAiChat` Hook がメッセージとリクエストのライフサイクルを管理します。停止、リセット、アンマウント時にリクエストを中止し、古いリクエストの遅延応答やエラーが新しい会話の状態を書き換えないようにします。読み取り後は Reader のロックを解放します。1 回の読み取りに含まれる複数の delta はまとめて反映します。入力中の下書きは `ChatComposer` 内に置くため、文字を入力するたびに会話全体を再描画しません。
+
 成功応答は `text/event-stream`。`start` にアシスタント ID と request ID、複数の `delta` にテキスト片、`finish` に終了、最後に `data: [DONE]` が入ります。`consumeSseChunk` は分割された境界を次回の読み取りまで保持し、壊れたイベントを無視します。画面は delta を React のテキストとして描画し、生 HTML を有効にしません。停止ボタンで Abort するとサーバーも片ごとに `request.signal.aborted` を確認します。
 
 ```text

@@ -4,7 +4,6 @@ import {
   Button,
   Checkbox,
   ConfigProvider,
-  Dialog,
   Empty,
   InfiniteLoading,
   Input,
@@ -17,7 +16,6 @@ import {
   Tabbar,
   TabbarItem,
   TextArea,
-  Toast,
 } from '@nutui/nutui-react';
 import enUS from '@nutui/nutui-react/dist/es/locales/en-US';
 import jaJP from '@nutui/nutui-react/dist/es/locales/ja-JP';
@@ -28,6 +26,8 @@ import { useMemo, useState, type ComponentProps, type ReactNode } from 'react';
 import type { Locale } from '@rh5/contracts';
 import type { UiKit } from '@rh5/mobile-ui/ui';
 
+import { confirmDialog, NutuiFeedback, showToast } from './feedback';
+
 const locales = { 'en-US': enUS, 'ja-JP': jaJP, 'zh-CN': zhCN, 'zh-HK': zhTW, 'zh-TW': zhTW };
 
 function Provider({ children, locale }: { children: ReactNode; locale: Locale }) {
@@ -37,6 +37,7 @@ function Provider({ children, locale }: { children: ReactNode; locale: Locale })
       theme={{ nutuiColorPrimary: '#4169e1', nutuiButtonBorderRadius: '14px' }}
     >
       {children}
+      <NutuiFeedback confirmText={locales[locale].confirm} cancelText={locales[locale].cancel} />
     </ConfigProvider>
   );
 }
@@ -180,17 +181,6 @@ export const nutuiKit: UiKit = {
       }}
     />
   ),
-  confirm: (message) =>
-    new Promise((resolve) => {
-      Dialog.confirm({
-        content: message,
-        onCancel: () => resolve(false),
-        onConfirm: () => resolve(true),
-      });
-    }),
-  toast: (message, tone) =>
-    Toast.show({
-      content: message,
-      icon: tone === 'success' ? 'success' : tone === 'error' ? 'fail' : undefined,
-    }),
+  confirm: confirmDialog,
+  toast: showToast,
 };

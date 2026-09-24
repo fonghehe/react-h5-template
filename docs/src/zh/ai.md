@@ -4,6 +4,8 @@
 
 页面把消息保存在 React 状态，并发送当前全部消息，附带语言头和 `X-Request-ID`。`chatRequestSchema` 在流开始前限制最多 30 条消息及单条 1000 字符。页面现在不会自动截断长历史，超过上限时返回错误。输入不合法时，服务器返回 HTTP 400 的普通 JSON `{ code, data: null, message, requestId }`；页面先读 JSON 错误，不会把它当 SSE 解析。
 
+共享 `useAiChat` Hook 管理消息和请求生命周期：停止、重置和组件卸载都会中止当前请求，旧请求的延迟响应或错误不能改写新对话的状态，读取结束后释放 Reader 锁。同一次读取中的多个 delta 合并后更新消息。`ChatComposer` 独立管理草稿，输入时不触发聊天记录重新渲染。
+
 成功响应是 `text/event-stream`：`start` 给助手消息 ID 与请求 ID，随后多次 `delta` 给文本片段，`finish` 结束，再发 `data: [DONE]`。`consumeSseChunk` 保留不完整的分块边界，下一次读取再接上；损坏事件会跳过。页面将 delta 当 React 文本渲染，不开启原始 HTML。点击停止会 Abort 请求，服务端在每个片段间检查 `request.signal.aborted`。
 
 ```text

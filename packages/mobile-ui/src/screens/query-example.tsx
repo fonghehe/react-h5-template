@@ -14,7 +14,7 @@ export default function QueryExamplePage() {
   const { formatMoney, locale, t } = useTranslation();
   const query = useQuery({
     queryKey: ['products', 'page', page, locale],
-    queryFn: () => api.products({ locale, page, pageSize: 2 }),
+    queryFn: ({ signal }) => api.products({ locale, page, pageSize: 2 }, signal),
     placeholderData: keepPreviousData,
   });
 

@@ -1,12 +1,10 @@
 'use client';
 
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { ShoppingBag } from 'lucide-react';
-import Link from 'next/link';
 
 import { api } from '@rh5/api-client';
-import { cartTotals, useCartStore } from '@rh5/stores';
 
+import { CartLink } from '../components/cart-link';
 import { ProductCard } from '../components/product-card';
 import { useTranslation } from '../hooks/use-translation';
 import { useUi } from '../ui';
@@ -14,11 +12,11 @@ import { useUi } from '../ui';
 export default function ProductsPage() {
   const { Button, ErrorState, InfiniteScroll, PullToRefresh, Skeleton } = useUi();
   const { locale, t } = useTranslation();
-  const itemCount = useCartStore((state) => cartTotals(state.lines).itemCount);
   const products = useInfiniteQuery({
     queryKey: ['products', locale],
     initialPageParam: 1,
-    queryFn: ({ pageParam }) => api.products({ locale, page: pageParam, pageSize: 4 }),
+    queryFn: ({ pageParam, signal }) =>
+      api.products({ locale, page: pageParam, pageSize: 4 }, signal),
     getNextPageParam: (lastPage) => (lastPage.hasMore ? lastPage.page + 1 : undefined),
   });
   const items = products.data?.pages.flatMap((page) => page.items) ?? [];
@@ -30,10 +28,7 @@ export default function ProductsPage() {
           <span className="eyebrow">{t('productsEyebrow')}</span>
           <h1>{t('productsTitle')}</h1>
         </div>
-        <Link className="cart-pill" href="/cart" aria-label={t('cartAria', { count: itemCount })}>
-          <ShoppingBag size={20} />
-          <span>{itemCount > 99 ? '99+' : itemCount}</span>
-        </Link>
+        <CartLink />
       </header>
       <p className="page-intro">{t('productsDescription')}</p>
 

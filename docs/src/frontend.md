@@ -19,10 +19,17 @@ The root `/` redirects into the app's mobile route set. The four fixed developme
 
 `AppProviders` creates one `QueryClient` per mounted app tree. Its queries use a 30-second stale time, one retry, and no refetch on window focus. Product lists use `useInfiniteQuery` with `['products', locale]`; details use `['product', id, locale]`. Including the locale in the key prevents an English catalog result from being reused as a Japanese result. Query results remain in Query; they are not mirrored into Zustand.
 
+The catalog, product detail, and pagination example forward Query's `signal` through the API client to `fetch`. Unsubscribed or cancelled queries can abort pending requests, and cancellation is preserved rather than wrapped as a network error. A separate `CartLink` subscribes to the catalog's cart count, so quantity changes update the badge without rendering every product card again.
+
 `packages/stores/src/session.ts` stores the selected locale, bearer token, and displayed user. `packages/stores/src/cart.ts` stores selected lines with product snapshots and quantities from 1 to 99. Both stores use Zustand persistence with hydration delayed until the client mounts. This avoids reading browser storage while Next.js renders on the server. Cart totals are selectors over local snapshots, so they are **not authoritative prices** for an order. The detail-page favorite heart is component-local state; it is not a saved favorites API.
+
+
+NutUI toasts and confirmation dialogs render through `NutuiFeedback` inside `ConfigProvider`. This avoids the legacy ReactDOM APIs used by the installed NutUI static helpers and supports React 19. Replacing a toast restarts its timer; unmounting clears timers and cancels pending confirmations.
 
 ## Mobile shell and extension points
 
 `MobileShell` renders the bottom tabs for the main routes and hides them for login, cart, checkout, AI, and detail pages. The shared stylesheet handles safe-area insets, a dynamic viewport, touch-friendly controls, and fixed commerce docks. The mobile examples demonstrate network state, share, clipboard, and capability fallbacks. A new journey should be tested at 320px and with the software keyboard visible if it adds a fixed action area.
 
 To add a new business screen, define its domain/request contract in `packages/contracts` and OpenAPI if it calls the server, implement a reusable screen in `packages/mobile-ui`, add thin page exports in all three apps, and extend the `UiKit` only when all adapters can supply the new capability. Put long-lived server data in Query, local user preference or cart data in Zustand, and form editing state in React Hook Form.
+
+Arco static toast and confirmation calls receive `createRoot` explicitly; configuring `ContextProvider` alone does not initialize them. NutUI confirmations use a native modal `dialog` with NutUI buttons, preserving keyboard cancellation, focus management, and the selected locale.

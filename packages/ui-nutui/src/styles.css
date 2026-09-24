@@ -1,1 +1,48 @@
 @import '@nutui/nutui-react/dist/style.css';
+
+.rh5-nutui-dialog {
+  width: min(320px, calc(100vw - 32px));
+  margin: auto;
+  padding: 24px;
+  border: 0;
+  border-radius: 16px;
+  background: #fff;
+  color: #1a1a1a;
+  overflow-wrap: anywhere;
+}
+
+.rh5-nutui-dialog::backdrop {
+  background: rgb(0 0 0 / 50%);
+}
+
+.rh5-nutui-dialog p {
+  margin: 0 0 24px;
+}
+
+.rh5-nutui-dialog-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.rh5-nutui-dialog-actions > button {
+  flex: 1;
+  min-height: 44px;
+}
+
+.rh5-nutui-toast {
+  position: fixed;
+  z-index: 1300;
+  top: 50%;
+  left: 50%;
+  width: max-content;
+  max-width: calc(100vw - 32px);
+  padding: 12px 20px;
+  border-radius: 8px;
+  background: rgb(0 0 0 / 80%);
+  color: #fff;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+  text-align: center;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}

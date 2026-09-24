@@ -257,15 +257,18 @@ export const arcoMobileKit: UiKit = {
   ),
   confirm: (message) =>
     new Promise((resolve) => {
-      Dialog.confirm({
-        children: message,
-        onCancel: () => resolve(false),
-        onOk: () => resolve(true),
-      });
+      Dialog.confirm(
+        {
+          children: message,
+          onCancel: () => resolve(false),
+          onOk: () => resolve(true),
+        },
+        { createRoot },
+      );
     }),
   toast: (message, tone) => {
-    if (tone === 'success') Toast.success(message);
-    else if (tone === 'error') Toast.error(message);
-    else Toast.info(message);
+    if (tone === 'success') Toast.success(message, { createRoot });
+    else if (tone === 'error') Toast.error(message, { createRoot });
+    else Toast.info(message, { createRoot });
   },
 };
