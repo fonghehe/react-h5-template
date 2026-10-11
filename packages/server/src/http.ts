@@ -3,6 +3,13 @@ import { supportedLocales, type ApiEnvelope, type Locale } from '@rh5/contracts'
 const localeSet = new Set<Locale>(supportedLocales);
 
 const serverMessages = {
+  internalError: {
+    'en-US': 'An unexpected server error occurred',
+    'ja-JP': 'サーバーで予期しないエラーが発生しました',
+    'zh-CN': '服务器发生意外错误',
+    'zh-HK': '伺服器發生非預期錯誤',
+    'zh-TW': '伺服器發生非預期錯誤',
+  },
   invalidCredentials: {
     'en-US': 'Incorrect username or password',
     'ja-JP': 'ユーザー名またはパスワードが正しくありません',
@@ -105,6 +112,26 @@ export function ok<T>(request: Request, data: T, message = 'ok') {
   } satisfies ApiEnvelope<T>);
 }
 
-export function fail(request: Request, status: number, message: string, code = status) {
-  return Response.json({ code, data: null, message, requestId: requestId(request) }, { status });
+export function fail(
+  request: Request,
+  status: number,
+  message: string,
+  code = status,
+  traceId = requestId(request),
+) {
+  return Response.json({ code, data: null, message, requestId: traceId }, { status });
+}
+
+export function withApiErrors<Args extends unknown[]>(
+  handler: (request: Request, ...args: Args) => Promise<Response>,
+) {
+  return async (request: Request, ...args: Args): Promise<Response> => {
+    try {
+      return await handler(request, ...args);
+    } catch (error) {
+      const traceId = requestId(request);
+      console.error('API request failed', { requestId: traceId, error });
+      return fail(request, 500, serverText(request, 'internalError'), 500, traceId);
+    }
+  };
 }

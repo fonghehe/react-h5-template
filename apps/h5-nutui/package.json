@@ -10,7 +10,7 @@
     "dev": "next dev --webpack --hostname 127.0.0.1 --port 6778",
     "build": "next build --webpack",
     "start": "next start --hostname 127.0.0.1 --port 6778",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "next typegen && tsc --noEmit"
   },
   "dependencies": {
     "@rh5/mobile-ui": "workspace:*",

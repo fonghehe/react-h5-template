@@ -95,8 +95,10 @@ export const nutuiKit: UiKit = {
     size,
     tone = 'default',
     type,
+    ...rest
   }) => (
     <Button
+      {...rest}
       block={block}
       className={className}
       disabled={disabled}

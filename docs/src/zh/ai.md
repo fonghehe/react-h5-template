@@ -2,7 +2,7 @@
 
 `/ai` 页面是真实可运行的 SSE 客户端，但服务端 `/api/ai/chat` 只生成固定演示回答，没有模型调用，也没有持久化历史会话。
 
-页面把消息保存在 React 状态，并发送当前全部消息，附带语言头和 `X-Request-ID`。`chatRequestSchema` 在流开始前限制最多 30 条消息及单条 1000 字符。页面现在不会自动截断长历史，超过上限时返回错误。输入不合法时，服务器返回 HTTP 400 的普通 JSON `{ code, data: null, message, requestId }`；页面先读 JSON 错误，不会把它当 SSE 解析。
+页面把完整会话保存在 React 状态，发送请求时附带语言头和 `X-Request-ID`。`chatRequestSchema` 在流开始前限制最多 30 条消息及单条 1000 字符。历史增长后，请求只保留问候语和最近 29 条消息，并将单条内容截取到 1000 字符；界面显示的历史保持完整。输入不合法时，服务器返回 HTTP 400 的普通 JSON `{ code, data: null, message, requestId }`；页面先读 JSON 错误，不会把它当 SSE 解析。
 
 共享 `useAiChat` Hook 管理消息和请求生命周期：停止、重置和组件卸载都会中止当前请求，旧请求的延迟响应或错误不能改写新对话的状态，读取结束后释放 Reader 锁。同一次读取中的多个 delta 合并后更新消息。`ChatComposer` 独立管理草稿，输入时不触发聊天记录重新渲染。
 

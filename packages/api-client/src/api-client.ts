@@ -1,11 +1,12 @@
-import type {
-  ApiEnvelope,
-  Locale,
-  LoginInput,
-  LoginResult,
-  Product,
-  ProductPage,
-  User,
+import {
+  apiEnvelopeSchema,
+  loginResponseSchema,
+  logoutResponseSchema,
+  productPageResponseSchema,
+  productResponseSchema,
+  userResponseSchema,
+  type Locale,
+  type LoginInput,
 } from '@rh5/contracts';
 
 export class ApiError extends Error {
@@ -24,7 +25,15 @@ interface RequestOptions extends RequestInit {
   token?: string;
 }
 
-async function request<T>(path: string, options: RequestOptions = {}): Promise<T> {
+interface ResponseSchema<T> {
+  safeParse: (value: unknown) => { success: true; data: T } | { success: false };
+}
+
+async function request<T>(
+  path: string,
+  schema: ResponseSchema<T>,
+  options: RequestOptions = {},
+): Promise<T> {
   const { locale = 'zh-CN', token, ...init } = options;
   if (!path.startsWith('/api/')) {
     throw new ApiError(
@@ -50,13 +59,15 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<T
     if (init.signal?.aborted) throw error;
     throw new ApiError('Network request failed', 0, currentRequestId);
   }
-  const payload = (await response.json().catch((error: unknown) => {
+  const decoded: unknown = await response.json().catch((error: unknown) => {
     if (init.signal?.aborted) throw error;
     return null;
-  })) as ApiEnvelope<T> | null;
-  if (!payload || typeof payload.code !== 'number' || typeof payload.requestId !== 'string') {
+  });
+  const envelope = apiEnvelopeSchema.safeParse(decoded);
+  if (!envelope.success) {
     throw new ApiError('Invalid API response', response.status, currentRequestId);
   }
+  const payload = envelope.data;
   if (!response.ok || payload.code !== 0) {
     throw new ApiError(
       payload.message ||
@@ -69,18 +80,23 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<T
       payload.requestId,
     );
   }
-  return payload.data;
+  const result = schema.safeParse(payload.data);
+  if (!result.success)
+    throw new ApiError('Invalid API response', response.status, payload.requestId);
+  return result.data;
 }
 
 export const api = {
   login: (body: LoginInput, locale: Locale) =>
-    request<LoginResult>('/api/auth/login', {
+    request('/api/auth/login', loginResponseSchema, {
       body: JSON.stringify(body),
       locale,
       method: 'POST',
     }),
-  logout: (locale: Locale) => request<null>('/api/auth/logout', { locale, method: 'POST' }),
-  user: (token: string, locale: Locale) => request<User>('/api/user', { locale, token }),
+  logout: (locale: Locale) =>
+    request('/api/auth/logout', logoutResponseSchema, { locale, method: 'POST' }),
+  user: (token: string, locale: Locale) =>
+    request('/api/user', userResponseSchema, { locale, token }),
   products: (
     params: { locale: Locale; page?: number; pageSize?: number },
     signal?: AbortSignal,
@@ -89,8 +105,11 @@ export const api = {
       page: String(params.page ?? 1),
       pageSize: String(params.pageSize ?? 10),
     });
-    return request<ProductPage>(`/api/products?${search}`, { locale: params.locale, signal });
+    return request(`/api/products?${search}`, productPageResponseSchema, {
+      locale: params.locale,
+      signal,
+    });
   },
   product: (id: string, locale: Locale, signal?: AbortSignal) =>
-    request<Product>(`/api/products/${id}`, { locale, signal }),
+    request(`/api/products/${id}`, productResponseSchema, { locale, signal }),
 };

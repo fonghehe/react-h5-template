@@ -1,9 +1,9 @@
 import { productPageSchema } from '@rh5/contracts';
 
-import { fail, localeFrom, ok, serverText } from '../http';
+import { fail, localeFrom, ok, serverText, withApiErrors } from '../http';
 import { listProducts } from '../repositories/catalog';
 
-export async function GET(request: Request) {
+export const GET = withApiErrors(async (request: Request) => {
   const url = new URL(request.url);
   const parsed = productPageSchema.safeParse({
     page: url.searchParams.get('page') ?? undefined,
@@ -14,4 +14,4 @@ export async function GET(request: Request) {
     request,
     await listProducts(localeFrom(request), parsed.data.page, parsed.data.pageSize),
   );
-}
+});

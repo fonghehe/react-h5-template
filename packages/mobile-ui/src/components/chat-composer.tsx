@@ -32,9 +32,10 @@ export function ChatComposer({
         value={input}
         onChange={setInput}
         placeholder={t('aiInput')}
+        aria-label={t('aiInput')}
         maxLength={1000}
         onEnter={(event) => {
-          if (!event.shiftKey) {
+          if (!event.shiftKey && !event.nativeEvent.isComposing && event.keyCode !== 229) {
             event.preventDefault();
             send();
           }

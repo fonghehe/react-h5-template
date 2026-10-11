@@ -2,16 +2,34 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { api, ApiError } from '../api-client';
 
+const product = {
+  id: 7,
+  title: 'Product',
+  description: '',
+  imageUrl: '',
+  price: 10,
+  memberPrice: 8,
+  shopName: '',
+  shopBadge: '',
+  delivery: '',
+};
+
 afterEach(() => vi.unstubAllGlobals());
 
 describe('API response boundary', () => {
   it('forwards cancellation and preserves request headers for catalog queries', async () => {
     const controller = new AbortController();
-    const fetch = vi
-      .fn<typeof globalThis.fetch>()
-      .mockImplementation(async () =>
-        Response.json({ code: 0, data: {}, message: 'ok', requestId: 'server-id' }),
-      );
+    const fetch = vi.fn<typeof globalThis.fetch>().mockImplementation(async (path) =>
+      Response.json({
+        code: 0,
+        data:
+          typeof path === 'string' && path.includes('?')
+            ? { items: [product], page: 2, pageSize: 4, total: 7, hasMore: false }
+            : product,
+        message: 'ok',
+        requestId: 'server-id',
+      }),
+    );
     vi.stubGlobal('fetch', fetch);
 
     await api.products({ locale: 'ja-JP', page: 2, pageSize: 4 }, controller.signal);
@@ -75,5 +93,50 @@ describe('API response boundary', () => {
   it('does not treat a missing envelope as successful data', async () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(Response.json({ items: [] })));
     await expect(api.products({ locale: 'en-US' })).rejects.toBeInstanceOf(ApiError);
+  });
+
+  it.each([
+    null,
+    {},
+    { items: null },
+    { items: [{ ...product, price: '10' }], page: 1, pageSize: 4, total: 1, hasMore: false },
+  ])('rejects malformed successful product pages: %j', async (data) => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(Response.json({ code: 0, data, requestId: 'server-id' })),
+    );
+    await expect(api.products({ locale: 'en-US' })).rejects.toMatchObject({
+      name: 'ApiError',
+      status: 200,
+      requestId: 'server-id',
+    });
+  });
+
+  it('rejects a successful login without a token', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(
+        Response.json({
+          code: 0,
+          requestId: 'server-id',
+          data: { id: 1, username: 'user', realName: 'User', avatar: '', roles: [] },
+        }),
+      ),
+    );
+    await expect(
+      api.login({ username: 'user', password: '123456' }, 'en-US'),
+    ).rejects.toBeInstanceOf(ApiError);
+  });
+
+  it('keeps valid data and accepts additional response fields', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi
+        .fn()
+        .mockResolvedValue(
+          Response.json({ code: 0, requestId: 'server-id', data: { ...product, future: true } }),
+        ),
+    );
+    await expect(api.product('7', 'en-US')).resolves.toMatchObject(product);
   });
 });

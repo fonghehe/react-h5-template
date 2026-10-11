@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import '@rh5/ui-arco-mobile/styles.css';
 import '@rh5/styles/globals.css';
 
-import { NetworkBanner } from '@rh5/mobile-ui';
+import { NetworkBanner } from '@rh5/mobile-ui/components/network-banner';
 import { Providers } from '../components/providers';
 
 export const metadata: Metadata = {
@@ -14,7 +14,6 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 1,
   viewportFit: 'cover',
   themeColor: '#4169e1',
 };

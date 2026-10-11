@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import { consumeSseChunk } from '@rh5/api-client';
 import type { Locale } from '@rh5/contracts';
+import { chatContext } from './chat-history';
 
 interface Message {
   id: string;
@@ -74,7 +75,7 @@ export function useAiChat({
           'Content-Type': 'application/json',
           'X-Request-ID': crypto.randomUUID(),
         },
-        body: JSON.stringify({ messages: outgoing }),
+        body: JSON.stringify({ messages: chatContext(outgoing) }),
         signal: active.signal,
       });
       if (!response.ok) {

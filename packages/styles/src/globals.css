@@ -495,7 +495,7 @@ a {
 /* 通用按钮覆盖：类直接落在三家 UI 的按钮上（adm-/nut-/arco- 前缀各不相同），
    globals.css 在各 UI 库样式之后加载，同特异性下此处胜出。 */
 .round-action {
-  min-height: 42px;
+  min-height: 44px;
   padding: 7px 14px;
   color: var(--brand-deep);
   font-weight: 750;
@@ -683,6 +683,7 @@ a {
 }
 .cart-line-bottom {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   align-items: center;
   justify-content: space-between;
@@ -692,8 +693,8 @@ a {
   font-size: 1rem;
 }
 .cart-line .adm-stepper {
-  --height: 28px;
-  --button-width: 28px;
+  --height: 44px;
+  --button-width: 44px;
   --input-width: 30px;
   --input-font-size: 12px;
 }
@@ -703,8 +704,8 @@ a {
   right: 10px;
   display: grid;
   place-items: center;
-  width: 34px;
-  height: 34px;
+  width: 44px;
+  height: 44px;
   color: var(--muted);
   cursor: pointer;
   background: transparent;
@@ -1374,16 +1375,18 @@ a {
 .ai-route {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr);
   height: 100dvh;
 }
 .chat-page {
+  min-width: 0;
   min-height: 0;
   overflow-y: auto;
   padding: 15px 16px 24px;
 }
 .chat-intro {
   display: grid;
-  grid-template-columns: 42px minmax(0, 1fr) 42px;
+  grid-template-columns: 42px minmax(0, 1fr) 44px;
   gap: 10px;
   align-items: center;
   padding: 12px;
@@ -1413,8 +1416,8 @@ a {
 .chat-intro button {
   display: grid;
   place-items: center;
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   color: var(--muted);
   cursor: pointer;
   background: transparent;
@@ -1423,23 +1426,28 @@ a {
 }
 .chat-messages {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
   gap: 16px;
 }
 .chat-message {
   display: flex;
   gap: 9px;
   align-items: flex-start;
+  min-width: 0;
 }
 .chat-message.user {
   justify-content: flex-end;
 }
 .chat-message p {
+  min-width: 0;
   max-width: min(82%, 450px);
   padding: 12px 14px;
   margin: 0;
   color: var(--ink);
   line-height: 1.65;
   white-space: pre-wrap;
+  overflow-wrap: anywhere;
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: 5px 17px 17px;
@@ -1483,15 +1491,16 @@ a {
   border-top: 1px solid var(--line);
   backdrop-filter: blur(18px);
 }
-.chat-composer .adm-text-area {
+.chat-composer :is(.adm-text-area, .nut-textarea, .arco-textarea) {
   flex: 1;
+  min-width: 0;
   min-height: 46px;
   padding: 12px 13px;
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 15px;
 }
-.send-button.adm-button {
+.chat-composer .send-button {
   display: grid;
   place-items: center;
   width: 46px;
@@ -1499,6 +1508,30 @@ a {
   height: 46px;
   padding: 0;
   border-radius: 15px;
+}
+
+.cart-line :is(.nut-inputnumber-minus, .nut-inputnumber-add, .arco-stepper > div[aria-label]) {
+  display: grid;
+  place-items: center;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.cart-line .nut-inputnumber {
+  flex: none;
+  width: max-content;
+}
+
+.query-recovery {
+  display: block;
+  margin-top: 16px;
+  color: var(--muted);
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
 }
 .send-button.stop {
   color: var(--danger);

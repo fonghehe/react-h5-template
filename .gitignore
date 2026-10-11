@@ -17,6 +17,7 @@ build/
 .next/
 .turbo/
 *.tsbuildinfo
+next-env.d.ts
 
 # vitepress
 **/.vitepress/cache/
@@ -78,8 +79,14 @@ CLAUDE.local.md
 **/.continue/index/
 **/.continue/logs/
 
-# Keep AGENTS.md, CLAUDE.md, GEMINI.md, .cursor/rules/, .claude/skills/,
-# .codex/skills/ and .github/copilot-instructions.md available to version control.
+# Local optimization records and skill execution scratch space only.
+# Keep shared agent guides, skills, plans and specifications tracked.
+**/docs/local-optimization/
+**/.superpowers/sdd/
+
+# Keep AGENT.md, AGENTS.md, CLAUDE.md, GEMINI.md, .cursor/rules/,
+# .agents/skills/, .claude/skills/, .codex/skills/ and
+# .github/copilot-instructions.md available to version control.
 
 # editors
 .idea

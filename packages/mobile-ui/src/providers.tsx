@@ -1,27 +1,24 @@
 'use client';
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import { useEffect, useState, type ReactNode } from 'react';
 
 import { useCartStore, useSessionStore } from '@rh5/stores';
 
 import { UiProvider, type UiKit } from './ui';
+import { createQueryClient } from './query-client';
 
 export function AppProviders({ children, kit }: { children: ReactNode; kit: UiKit }) {
-  const [queryClient] = useState(
-    () =>
-      new QueryClient({
-        defaultOptions: {
-          queries: { staleTime: 30_000, retry: 1, refetchOnWindowFocus: false },
-          mutations: { retry: 0 },
-        },
-      }),
-  );
+  const [queryClient] = useState(createQueryClient);
   const locale = useSessionStore((state) => state.locale);
 
   useEffect(() => {
     void useCartStore.persist.rehydrate();
     void useSessionStore.persist.rehydrate();
+    document.documentElement.dataset.hydrated = 'true';
+    return () => {
+      delete document.documentElement.dataset.hydrated;
+    };
   }, []);
 
   useEffect(() => {

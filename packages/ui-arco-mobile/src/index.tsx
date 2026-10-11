@@ -172,8 +172,29 @@ function InfiniteScroll({ hasMore, loadMore }: ComponentProps<UiKit['InfiniteScr
 export const arcoMobileKit: UiKit = {
   name: 'Arco Design Mobile',
   Provider,
-  Button: ({ block, children, className, disabled, loading, onClick, size, tone = 'default' }) => (
+  Button: ({
+    block,
+    children,
+    className,
+    disabled,
+    loading,
+    onClick,
+    size,
+    tone = 'default',
+    type = 'button',
+    'aria-label': label,
+  }) => (
     <Button
+      ref={(handle) => {
+        // Arco exposes the native element through its documented ref but does
+        // not forward native type, disabled or ARIA attributes itself.
+        const button = handle?.dom;
+        if (!button) return;
+        button.type = type;
+        button.disabled = Boolean(disabled || loading);
+        if (label !== undefined) button.setAttribute('aria-label', label);
+        else button.removeAttribute('aria-label');
+      }}
       className={className}
       disabled={disabled}
       loading={loading}

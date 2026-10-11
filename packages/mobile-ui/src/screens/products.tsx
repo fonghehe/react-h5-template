@@ -38,7 +38,7 @@ export default function ProductsPage() {
             <Skeleton className="product-skeleton" key={item} />
           ))}
         </div>
-      ) : products.isError ? (
+      ) : products.isError && !products.data ? (
         <ErrorState
           title={t('productFailed')}
           description={products.error.message}
@@ -64,12 +64,27 @@ export default function ProductsPage() {
               <ProductCard product={product} key={product.id} />
             ))}
           </div>
-          <InfiniteScroll
-            loadMore={async () => {
-              await products.fetchNextPage();
-            }}
-            hasMore={Boolean(products.hasNextPage)}
-          />
+          {products.isError ? (
+            <output className="query-recovery">
+              <p>{products.error.message}</p>
+              <Button
+                disabled={products.isFetching}
+                onClick={async () => {
+                  if (products.isFetchNextPageError) await products.fetchNextPage();
+                  else await products.refetch();
+                }}
+              >
+                {t('retry')}
+              </Button>
+            </output>
+          ) : (
+            <InfiniteScroll
+              loadMore={async () => {
+                if (!products.isFetching) await products.fetchNextPage();
+              }}
+              hasMore={Boolean(products.hasNextPage)}
+            />
+          )}
         </PullToRefresh>
       )}
     </section>

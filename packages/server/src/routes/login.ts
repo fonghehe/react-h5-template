@@ -1,10 +1,10 @@
 import { loginSchema } from '@rh5/contracts';
 
 import { createAccessToken } from '../auth';
-import { fail, ok, serverText } from '../http';
+import { fail, ok, serverText, withApiErrors } from '../http';
 import { authenticateUser } from '../repositories/users';
 
-export async function POST(request: Request) {
+export const POST = withApiErrors(async (request: Request) => {
   const parsed = loginSchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) return fail(request, 400, serverText(request, 'invalidRequest'));
   const user = await authenticateUser(parsed.data.username, parsed.data.password);
@@ -14,4 +14,4 @@ export async function POST(request: Request) {
     { ...user, accessToken: createAccessToken(user.id) },
     serverText(request, 'loginSuccess'),
   );
-}
+});

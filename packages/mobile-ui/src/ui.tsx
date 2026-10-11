@@ -6,6 +6,7 @@ import {
   type ButtonHTMLAttributes,
   type ComponentType,
   type InputHTMLAttributes,
+  type KeyboardEvent,
   type ReactNode,
   type TextareaHTMLAttributes,
 } from 'react';
@@ -36,7 +37,7 @@ export interface UiTextAreaProps extends Pick<
 > {
   maxLength?: number;
   onChange?: (value: string) => void;
-  onEnter?: (event: { preventDefault: () => void; shiftKey: boolean }) => void;
+  onEnter?: (event: KeyboardEvent<HTMLTextAreaElement>) => void;
   value?: string;
 }
 

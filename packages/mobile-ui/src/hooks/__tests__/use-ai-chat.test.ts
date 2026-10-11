@@ -3,6 +3,7 @@ import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { useAiChat } from '../use-ai-chat';
+import { chatRequestSchema } from '@rh5/contracts';
 
 function deferred<T>() {
   let resolve!: (value: T) => void;
@@ -15,6 +16,11 @@ function deferred<T>() {
 }
 
 type ReadChunk = () => Promise<{ done: boolean; value?: Uint8Array }>;
+
+function requestBody(options: RequestInit | undefined): unknown {
+  if (typeof options?.body !== 'string') throw new Error('Expected a JSON request body');
+  return JSON.parse(options.body);
+}
 
 function streamResponse(read = vi.fn<ReadChunk>().mockResolvedValue({ done: true })) {
   const releaseLock = vi.fn<() => void>();
@@ -199,5 +205,45 @@ describe('AI chat lifecycle', () => {
 
     expect(onError).toHaveBeenCalledWith('Invalid history');
     expect(chat.streaming).toBe(false);
+  });
+
+  it('keeps displaying the full conversation while sending valid recent context after 16 turns', async () => {
+    const fetch = vi
+      .fn<typeof globalThis.fetch>()
+      .mockImplementation(async () => streamResponse().response);
+    vi.stubGlobal('fetch', fetch);
+    for (let turn = 1; turn <= 17; turn++) {
+      await act(async () => chat.send(`Question ${turn}`));
+    }
+    expect(chat.messages).toHaveLength(35);
+    for (const [, options] of fetch.mock.calls) {
+      expect(chatRequestSchema.safeParse(requestBody(options)).success).toBe(true);
+    }
+    const sent = chatRequestSchema.parse(requestBody(fetch.mock.calls.at(-1)?.[1]));
+    expect(sent.messages[0].content).toBe('Hello');
+    expect(sent.messages.at(-1)?.content).toBe('Question 17');
+  });
+
+  it('limits long assistant content only in outgoing context', async () => {
+    const reply = 'x'.repeat(1100);
+    const fetch = vi.fn<typeof globalThis.fetch>().mockImplementation(
+      async () =>
+        streamResponse(
+          vi
+            .fn<ReadChunk>()
+            .mockResolvedValueOnce({
+              done: false,
+              value: new TextEncoder().encode(
+                `data: ${JSON.stringify({ type: 'delta', delta: reply })}\n\n`,
+              ),
+            })
+            .mockResolvedValue({ done: true }),
+        ).response,
+    );
+    vi.stubGlobal('fetch', fetch);
+    await act(async () => chat.send('First'));
+    await act(async () => chat.send('Second'));
+    expect(chat.messages[2].content).toBe(reply);
+    expect(chatRequestSchema.safeParse(requestBody(fetch.mock.calls[1][1])).success).toBe(true);
   });
 });

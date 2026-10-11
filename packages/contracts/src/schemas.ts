@@ -1,5 +1,8 @@
 import { z } from 'zod';
 
+export const CHAT_MAX_MESSAGES = 30;
+export const CHAT_MAX_CONTENT_LENGTH = 1000;
+
 export const loginSchema = z.object({
   username: z.string().trim().min(1, '请输入用户名'),
   password: z.string().min(6, '密码至少需要 6 位'),
@@ -26,11 +29,11 @@ export const chatRequestSchema = z.object({
       z.object({
         id: z.string().min(1).max(100),
         role: z.enum(['assistant', 'user']),
-        content: z.string().max(1000),
+        content: z.string().max(CHAT_MAX_CONTENT_LENGTH),
       }),
     )
     .min(1)
-    .max(30),
+    .max(CHAT_MAX_MESSAGES),
 });
 
 export const checkoutSchema = z.object({
